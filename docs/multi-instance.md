@@ -15,6 +15,7 @@ This procedure will allow you to move your data to the new standard paths (see [
 1. Stop Elasticsearch before the migration
 
 2. Migrate your data to the new standard paths:
+
 ```
 # mv /etc/elasticsearch/${ES_INSTANCE_NAME}/* /etc/elasticsearch/ && rm -fr /etc/elasticsearch/${ES_INSTANCE_NAME}/
 mv: overwrite '/etc/elasticsearch/elasticsearch.keystore'? y
@@ -32,6 +33,7 @@ nodes
 5. After ansible-role new deployment, you can do some cleanup of old Init file and Default file:
 
 Example:
+
 ```
 $ systemctl stop elasticsearch
 $ mv /etc/elasticsearch/${ES_INSTANCE_NAME}/* /etc/elasticsearch/ && rm -fr /etc/elasticsearch/${ES_INSTANCE_NAME}/
@@ -85,6 +87,7 @@ $ find /etc -name '${INVENTORY_HOSTNAME}-${ES_INSTANCE_NAME}*'
 This procedure will allow you to keep your data to the old paths:
 
 1. Override these variables to match previous values:
+
 ```yaml
 es_conf_dir: /etc/elasticsearch/${ES_INSTANCE_NAME}
 es_data_dirs:
@@ -98,6 +101,7 @@ es_pid_dir: /var/run/elasticsearch/${INVENTORY_HOSTNAME}-${ES_INSTANCE_NAME}
 3. After ansible-role new deployment, you can do some cleanup of old Init file and Default file.
 
 Example:
+
 ```bash
 $ ansible-playbook -e '{"es_conf_dir":"/etc/elasticsearch/node1","es_data_dirs":["/var/lib/elasticsearch/localhost-node1"],"es_log_dir":"/var/log/elasticsearch/localhost-node1","es_pid_dir":"/var/run/elasticsearch/localhost-node1"}' playbook.yml
 ...
