@@ -45,6 +45,7 @@ $ bin/elasticsearch-certutil cert --ca ./my-ca.p12 --out ./my-keystore.p12 --pas
 - `es_enable_auto_ssl_configuration` Default `true`. Whether this role should add automatically generated SSL config to elasticsearch.yml.
 - `es_ssl_certificate_path` Default `{{ es_conf_dir }}/certs`. The location where certificates should be stored on the ES node.
 - `es_ssl_verification_mode` Default `certificate`. See [SSL verification_mode](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html#ssl-tls-settings) for options.
+- `es_ssl_remote_src` Default `false`. Whether the certificate files should be copied from a local or remote source.
 - `es_ssl_certificate_authority` PEM encoded certificate file that should be trusted.
 - `es_validate_certs` Default `yes`. Determines if ansible should validate SSL certificates when performing actions over HTTPS. e.g. installing templates and managing native users.
 
