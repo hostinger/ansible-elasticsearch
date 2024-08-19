@@ -17,10 +17,6 @@ provisioner:
   no_proxy: localhost,127.0.0.1
   ignore_extensions_from_root: [".git",".idea",".kitchen.yml"]
   ignore_paths_from_root: [".git",".idea",".kitchen"]
-  attributes:
-    extra_vars:
-      es_major_version: "8.x"
-      es_version: "8.14.2"
 
 platforms:
   - name: ubuntu-14.04
