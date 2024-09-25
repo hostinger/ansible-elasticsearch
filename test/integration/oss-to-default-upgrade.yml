@@ -2,7 +2,7 @@
 - name: Deploy Elasticsearch OSS version
   hosts: localhost
   post_tasks:
-    - include: elasticsearch/test/integration/debug.yml
+    - ansible.builtin.include_tasks: elasticsearch/test/integration/debug.yml
   roles:
     - elasticsearch
   vars:
@@ -12,7 +12,7 @@
 - name: Upgrade to Elasticsearch default version
   hosts: localhost
   post_tasks:
-    - include: elasticsearch/test/integration/debug.yml
+    - ansible.builtin.include_tasks: elasticsearch/test/integration/debug.yml
   roles:
     - elasticsearch
   vars:
