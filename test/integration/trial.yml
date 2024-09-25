@@ -2,7 +2,7 @@
 - name: Setup Elasticsearch with security enabled and a trial license
   hosts: localhost
   post_tasks:
-    - include: elasticsearch/test/integration/debug.yml
+    - ansible.builtin.include_tasks: elasticsearch/test/integration/debug.yml
   roles:
     - elasticsearch
   vars:

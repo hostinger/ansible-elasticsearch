@@ -2,7 +2,7 @@
 - name: Setup Elasticsearch OSS 6.x
   hosts: localhost
   post_tasks:
-    - include: elasticsearch/test/integration/debug.yml
+    - ansible.builtin.include_tasks: elasticsearch/test/integration/debug.yml
   roles:
     - elasticsearch
   vars:

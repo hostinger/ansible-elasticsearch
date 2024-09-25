@@ -2,7 +2,7 @@
 - name: Setup Elasticsearch with custom config files
   hosts: localhost
   post_tasks:
-    - include: elasticsearch/test/integration/debug.yml
+    - ansible.builtin.include_tasks: elasticsearch/test/integration/debug.yml
   roles:
     - elasticsearch
   vars:
