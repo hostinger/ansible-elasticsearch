@@ -423,6 +423,8 @@ In addition to es_config, the following parameters allow the customization of th
 - `es_use_repository` Setting this to `false` will stop Ansible from using the official Elastic package from any repository configured on the system.
 - `es_add_repository` Setting this to `false` will stop Ansible to add the official Elastic package repositories (if es_use_repository is true) if you want to use a repo already present.
 - `es_custom_package_url` the URL to the rpm or deb package for Ansible to install. When using this you will also need to set `es_use_repository: false` and make sure that the `es_version` matches the version being installed from your custom URL. E.g. `es_custom_package_url: https://downloads.example.com/elasticsearch.rpm`
+- `es_identifier_string` String to search for LLDP neighbors to be used as value for `es_identifier_attribute`.
+- `es_identifier_attribute` Node attribute name declared in elasticsearch.yml as `node.attr.<name>`.
 
 Earlier examples illustrate the installation of plugins using `es_plugins`. For officially supported plugins no version or source delimiter is required. The plugin script will determine the appropriate plugin version based on the target Elasticsearch version. For community based plugins include the full url. This approach should NOT be used for the X-Pack plugin. See X-Pack below for details here.
 
