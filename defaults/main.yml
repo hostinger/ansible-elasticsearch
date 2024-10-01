@@ -72,4 +72,4 @@ es_delete_unmanaged_file: true
 es_delete_unmanaged_native: true
 
 es_healthcheck_auth_scheme: https
-es_healthcheck_timeout: 3600
+es_healthcheck_retries: 360
