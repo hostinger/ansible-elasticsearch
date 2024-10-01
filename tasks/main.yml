@@ -59,6 +59,18 @@
   tags:
       - xpack
 
+- name: Wait for cluster status to become green
+  community.elastic.elastic_cluster_health:
+    auth_scheme: "{{ es_healthcheck_auth_scheme }}"
+    login_password: "{{ es_api_basic_auth_password }}"
+    login_user: "{{ es_api_basic_auth_username }}"
+    login_hosts: "{{ es_config['discovery.seed_hosts'] }}"
+    auth_method: http_auth
+    wait_for: status
+    to_be: green
+    timeout: "{{ es_healthcheck_timeout }}"
+  when: not es_bootstrap | default(false)
+
 - name: flush handlers
   meta: flush_handlers
 

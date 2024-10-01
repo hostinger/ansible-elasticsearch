@@ -60,7 +60,8 @@ You can now override the configuration files with your own versions by using the
 
 ## Dependency
 
-This role uses the json_query filter which [requires jmespath](https://github.com/ansible/ansible/issues/24319) on the local machine.
+- json_query filter requires [jmespath](https://github.com/ansible/ansible/issues/24319) on the local machine.
+- health check uses [python elasticsearch client](https://elasticsearch-py.readthedocs.io) which must be installed on the target machine.
 
 ## Testing
 
