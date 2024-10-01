@@ -47,7 +47,9 @@
     allow_downgrade: '{{ allow_downgrade }}'
   when: es_use_repository and not ansible_check_mode
   register: redhat_elasticsearch_install_from_repo
-  notify: restart elasticsearch
+  notify:
+    - restart elasticsearch
+    - reload systemd configuration
   until: redhat_elasticsearch_install_from_repo.rc == 0
   retries: 5
   delay: 10
@@ -65,4 +67,6 @@
     state: present
   when: not es_use_repository
   register: elasticsearch_install_from_package
-  notify: restart elasticsearch
+  notify:
+    - restart elasticsearch
+    - reload systemd configuration
