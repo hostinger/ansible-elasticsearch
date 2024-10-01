@@ -68,7 +68,7 @@
     auth_method: http_auth
     wait_for: status
     to_be: green
-    timeout: "{{ es_healthcheck_timeout }}"
+    poll: "{{ es_healthcheck_retries }}"
   when: not es_bootstrap | default(false)
 
 - name: flush handlers
