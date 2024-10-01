@@ -29,7 +29,7 @@
     state: directory
     owner: "{{ es_user }}"
     group: "{{ es_group }}"
-    mode: "2750"
+    mode: "750"
   with_items:
     - "{{ es_log_dir }}"
     - "{{ es_data_dirs }}"
