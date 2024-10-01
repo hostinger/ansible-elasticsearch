@@ -91,7 +91,9 @@
     cache_valid_time: 86400
   when: es_use_repository
   register: debian_elasticsearch_install_from_repo
-  notify: restart elasticsearch
+  notify:
+    - restart elasticsearch
+    - reload systemd configuration
   environment:
     ES_PATH_CONF: "{{ es_conf_dir }}"
 
@@ -113,6 +115,8 @@
     state: present
   when: not es_use_repository
   register: elasticsearch_install_from_package
-  notify: restart elasticsearch
+  notify:
+    - restart elasticsearch
+    - reload systemd configuration
   environment:
     ES_PATH_CONF: "{{ es_conf_dir }}"
