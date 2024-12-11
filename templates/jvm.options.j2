@@ -22,8 +22,8 @@
 -Xms{{ es_heap_size }}
 -Xmx{{ es_heap_size }}
 {% else %}
--Xms2g
--Xmx2g
+-Xms{{ (ansible_memtotal_mb * 0.5) | int }}m
+-Xmx{{ (ansible_memtotal_mb * 0.5) | int }}m
 {% endif %}
 
 ################################################################
