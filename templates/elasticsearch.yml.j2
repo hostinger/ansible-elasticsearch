@@ -3,6 +3,7 @@
 {{ es_config | to_nice_yaml(indent=2) }}
 {% endif %}
 {% if ansible_local.lldp is defined %}
+{% if es_identifier_string == "elastic" %}
 {% for interface in ansible_local.lldp.lldp.interface %}
 {% set iface_data = interface.get(ansible_default_ipv4.interface) %}
 {% set chassis_key = iface_data.chassis.keys() | list | first %}
@@ -10,7 +11,16 @@
 node.attr.{{ es_identifier_attribute }}: {{ chassis_key }}
 {% endif %}
 {% endfor %}
+{% else %}
+{% set first_interface = ansible_local.lldp.lldp.interface[0] %}
+{% set iface_data = first_interface.get(ansible_default_ipv4.interface) %}
+{% set chassis_key = iface_data.chassis.keys() | list | first %}
+{% if es_identifier_string in chassis_key %}
+node.attr.{{ es_identifier_attribute }}: {{ chassis_key }}
 {% endif %}
+{% endif %}
+{% endif %}
+
 
 {% if es_config['cluster.name'] is not defined %}
 cluster.name: elasticsearch
