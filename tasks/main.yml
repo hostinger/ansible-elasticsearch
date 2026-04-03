@@ -1,13 +1,13 @@
 ---
 
-- set_fact: "es_major_version={{ es_version.split('.')[0] }}.x"
+- ansible.builtin.set_fact: "es_major_version={{ es_version.split('.')[0] }}.x"
   when:
       - es_major_version is undefined
   tags:
       - always
 
 - name: os-specific vars
-  include_vars: "{{ansible_os_family}}.yml"
+  ansible.builtin.include_vars: "{{ansible_os_family}}.yml"
   tags:
       - always
 
@@ -72,22 +72,22 @@
   when: not es_bootstrap | default(false)
 
 - name: flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Make sure elasticsearch is started
   become: yes
-  service: name=elasticsearch state=started enabled=yes
+  ansible.builtin.service: name=elasticsearch state=started enabled=yes
   when: es_start_service
 
 - name: Wait for elasticsearch to startup
-  wait_for: host={{ es_api_host }} port={{ es_api_port }} delay=5 connect_timeout=1
+  ansible.builtin.wait_for: host={{ es_api_host }} port={{ es_api_port }} delay=5 connect_timeout=1
   when: es_restarted is defined and es_restarted.changed and es_start_service
 
 - name: set fact manage_native_realm to false
-  set_fact: manage_native_realm=false
+  ansible.builtin.set_fact: manage_native_realm=false
 
 - name: set fact manage_native_realm to true
-  set_fact: manage_native_realm=true
+  ansible.builtin.set_fact: manage_native_realm=true
   when:
    - es_start_service
    - not oss_version
@@ -95,7 +95,7 @@
 
 # If playbook runs too fast, Native commands could fail as the Native Realm is not yet up
 - name: Wait {{ es_api_sleep }} seconds for the Native Realm to come up
-  wait_for:
+  ansible.builtin.wait_for:
     timeout: "{{ es_api_sleep }}"
   when: manage_native_realm | bool
 
