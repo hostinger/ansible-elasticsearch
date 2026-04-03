@@ -1,4 +1,3 @@
-.kitchen/
 license*.json
 *.pyc
 .vendor

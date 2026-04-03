@@ -1,0 +1,40 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Assert Elasticsearch is running
+      ansible.builtin.assert:
+        that:
+          - "'elasticsearch.service' in ansible_facts.services"
+          - "ansible_facts.services['elasticsearch.service'].state == 'running'"
+
+    - name: Wait for Elasticsearch HTTPS API
+      ansible.builtin.uri:
+        url: "https://localhost:9200"
+        url_username: elastic
+        url_password: "changeme"
+        validate_certs: false
+        status_code: 200
+      register: api_response
+      until: api_response.status == 200
+      retries: 30
+      delay: 10
+
+    - name: Assert correct version
+      ansible.builtin.assert:
+        that:
+          - "api_response.json.version.number == '8.19.10'"
+        fail_msg: "Expected 8.19.10, got {{ api_response.json.version.number }}"
+
+    - name: Assert TLS certificate file exists
+      ansible.builtin.stat:
+        path: /etc/ssl/certs/test.crt
+      register: cert_stat
+
+    - name: Verify SSL certificate in place
+      ansible.builtin.assert:
+        that: cert_stat.stat.exists

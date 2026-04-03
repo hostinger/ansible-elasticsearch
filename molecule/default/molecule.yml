@@ -1,0 +1,30 @@
+---
+driver:
+  name: docker
+
+platforms:
+  - name: elasticsearch
+    image: geerlingguy/docker-ubuntu2204-ansible:latest
+    pre_build_image: true
+    command: ""
+    privileged: true
+    cgroupns_mode: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    ulimits:
+      - "nofile:65536:65536"
+      - "memlock:-1:-1"
+
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "${MOLECULE_PROJECT_DIRECTORY}/.."
+    ANSIBLE_FORCE_COLOR: "true"
+    PY_COLORS: "1"
+  config_options:
+    defaults:
+      stdout_callback: default
+      result_format: yaml
+
+verifier:
+  name: ansible

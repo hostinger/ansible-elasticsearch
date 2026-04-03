@@ -1,0 +1,37 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Assert Elasticsearch is running
+      ansible.builtin.assert:
+        that:
+          - "'elasticsearch.service' in ansible_facts.services"
+          - "ansible_facts.services['elasticsearch.service'].state == 'running'"
+
+    - name: Wait for Elasticsearch API
+      ansible.builtin.uri:
+        url: "http://localhost:9200"
+        status_code: 200
+      register: api_response
+      until: api_response.status == 200
+      retries: 30
+      delay: 10
+
+    - name: Assert correct version
+      ansible.builtin.assert:
+        that:
+          - "api_response.json.version.number == '8.19.10'"
+        fail_msg: "Expected 8.19.10, got {{ api_response.json.version.number }}"
+
+    - name: Assert elasticsearch config file exists
+      ansible.builtin.stat:
+        path: /etc/elasticsearch/elasticsearch.yml
+      register: config_stat
+
+    - name: Verify config file present
+      ansible.builtin.assert:
+        that: config_stat.stat.exists

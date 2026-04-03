@@ -2,9 +2,11 @@
 allow_duplicates: true
 
 galaxy_info:
-  author: Robin Clarke, Jakob Reiter, Dale McDiarmid
-  description: Elasticsearch for Linux
-  company: "Elastic.co"
+  author: hostinger/observability
+  description: Fork of elastic.elasticsearch role from Ansible Galaxy, with customizations for Hostinger's use case.
+  namespace: hostinger
+  role_name: elasticsearch
+  company: "Hostinger"
   license: "license (Apache)"
   min_ansible_version: 2.5.0
   platforms:

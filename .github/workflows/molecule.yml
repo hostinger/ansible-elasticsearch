@@ -1,0 +1,57 @@
+---
+name: Molecule Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  #  lint:
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - uses: actions/checkout@v4
+  #
+  #      - uses: actions/setup-python@v5
+  #        with:
+  #          python-version: "3.12"
+  #          cache: pip
+
+  #      - name: Install dependencies
+  #        run: pip install -r requirements.txt
+
+  #      - name: Run ansible-lint
+  #        run: ansible-lint
+  #
+  molecule:
+    runs-on: ubuntu-latest
+    #    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario:
+          - default
+          - security
+          - custom-config
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Ansible collections
+        run: ansible-galaxy collection install -r requirements.yml
+
+      - name: Run Molecule tests
+        run: molecule test -s ${{ matrix.scenario }}
+        env:
+          ANSIBLE_FORCE_COLOR: "true"
+          PY_COLORS: "1"

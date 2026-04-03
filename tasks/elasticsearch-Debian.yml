@@ -51,7 +51,7 @@
       url: '{{ es_apt_key }}'
       id: '{{ es_apt_key_id }}'
       state: present
-    when: es_add_repository and es_apt_key | string
+    when: es_add_repository and es_apt_key | length > 0
 
   - name: Debian - Add elasticsearch repository
     apt_repository:
@@ -79,7 +79,7 @@
   dpkg_selections:
     name: "{{ es_package_name }}"
     selection: "install"
-  when: not es_version_lock or (installed_es_version.stdout and installed_es_version.stdout != es_version)
+  when: not es_version_lock or (installed_es_version.stdout | length > 0 and installed_es_version.stdout != es_version)
 
 - name: Debian - Ensure elasticsearch is installed
   become: yes

@@ -1,0 +1,49 @@
+---
+- name: Prepare SSL certificates
+  hosts: all
+  become: true
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install gnupg for apt key management
+      ansible.builtin.apt:
+        name: gnupg
+        state: present
+
+    - name: Ensure openssl is installed
+      ansible.builtin.package:
+        name: openssl
+        state: present
+
+    - name: Ensure SSL directories exist with least privilege
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        mode: "{{ item.mode }}"
+      loop:
+        - { path: "/etc/ssl/private", mode: "0750" }
+        - { path: "/etc/ssl/certs", mode: "0755" }
+
+    - name: Generate self-signed certificate and key
+      ansible.builtin.command:
+        cmd: >
+          openssl req -x509 -nodes -newkey rsa:2048
+          -keyout /etc/ssl/private/test.key
+          -out /etc/ssl/certs/test.crt
+          -days 365
+          -subj "/CN=localhost"
+          -addext "subjectAltName=IP:127.0.0.1,DNS:localhost"
+        creates: /etc/ssl/certs/test.crt
+
+    - name: Set private key permissions
+      ansible.builtin.file:
+        path: /etc/ssl/private/test.key
+        mode: "0640"
+
+    - name: Set certificate permissions
+      ansible.builtin.file:
+        path: /etc/ssl/certs/test.crt
+        mode: "0644"
