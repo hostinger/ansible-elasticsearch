@@ -2,11 +2,12 @@ __author__ = "dale mcdiarmid"
 
 import re
 import os.path
-from six import string_types
 
 
-def modify_list(values=[], pattern="", replacement="", ignorecase=False):
+def modify_list(values=None, pattern="", replacement="", ignorecase=False):
     """ Perform a `re.sub` on every item in the list"""
+    if values is None:
+        values = []
     if ignorecase:
         flags = re.I
     else:
@@ -15,17 +16,25 @@ def modify_list(values=[], pattern="", replacement="", ignorecase=False):
     return [_re.sub(replacement, value) for value in values]
 
 
-def append_to_list(values=[], suffix=""):
-    if isinstance(values, string_types):
+def append_to_list(values=None, suffix=""):
+    if values is None:
+        values = []
+    if isinstance(values, str):
         values = values.split(",")
     return [str(value + suffix) for value in values]
 
 
-def array_to_str(values=[], separator=","):
+def array_to_str(values=None, separator=","):
+    if values is None:
+        values = []
     return separator.join(values)
 
 
-def extract_role_users(users={}, exclude_users=[]):
+def extract_role_users(users=None, exclude_users=None):
+    if users is None:
+        users = {}
+    if exclude_users is None:
+        exclude_users = []
     role_users = []
     for user, details in list(users.items()):
         if user not in exclude_users and "roles" in details:
@@ -38,19 +47,23 @@ def filename(filename=""):
     return os.path.splitext(os.path.basename(filename))[0]
 
 
-def remove_reserved(user_roles={}):
+def remove_reserved(user_roles=None):
+    if user_roles is None:
+        user_roles = {}
     not_reserved = []
     for user_role, details in list(user_roles.items()):
         if (
-            not "metadata" in details
-            or not "_reserved" in details["metadata"]
+            "metadata" not in details
+            or "_reserved" not in details["metadata"]
             or not details["metadata"]["_reserved"]
         ):
             not_reserved.append(user_role)
     return not_reserved
 
 
-def filter_reserved(users_role={}):
+def filter_reserved(users_role=None):
+    if users_role is None:
+        users_role = {}
     reserved = []
     for user_role, details in list(users_role.items()):
         if (
