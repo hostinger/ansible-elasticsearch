@@ -2,7 +2,6 @@ __author__ = "dale mcdiarmid"
 
 import re
 import os.path
-from six import string_types
 
 
 def modify_list(values=[], pattern="", replacement="", ignorecase=False):
@@ -16,7 +15,7 @@ def modify_list(values=[], pattern="", replacement="", ignorecase=False):
 
 
 def append_to_list(values=[], suffix=""):
-    if isinstance(values, string_types):
+    if isinstance(values, str):
         values = values.split(",")
     return [str(value + suffix) for value in values]
 
