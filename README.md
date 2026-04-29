@@ -65,7 +65,7 @@ You can now override the configuration files with your own versions by using the
 
 ## Testing
 
-This playbook uses [Kitchen](https://kitchen.ci/) for CI and local testing.
+This playbook uses [Molecule](https://molecule.readthedocs.io/) for CI and local testing.
 
 ### Requirements
 

@@ -9,7 +9,8 @@
   when: es_enable_xpack is defined and not es_enable_xpack
   block:
   - name: Set fact oss_version when using es_enable_xpack
-    set_fact: oss_version=true
+    ansible.builtin.set_fact:
+      oss_version: true
   - name: Warn about deprecated es_enable_xpack variable
     debug:
       msg: "WARNING: es_enable_xpack variable is now deprecated. You should use oss_version instead"

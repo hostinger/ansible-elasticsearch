@@ -1,0 +1,60 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Assert Elasticsearch is running
+      ansible.builtin.assert:
+        that:
+          - "'elasticsearch.service' in ansible_facts.services"
+          - "ansible_facts.services['elasticsearch.service'].state == 'running'"
+
+    - name: Wait for Elasticsearch API
+      ansible.builtin.uri:
+        url: "http://localhost:9200"
+        status_code: 200
+      register: api_response
+      until: api_response.status == 200
+      retries: 30
+      delay: 10
+
+    - name: Assert correct version
+      ansible.builtin.assert:
+        that:
+          - "api_response.json.version.number == '8.19.10'"
+        fail_msg: "Expected 8.19.10, got {{ api_response.json.version.number }}"
+
+    - name: Read deployed log4j2.properties
+      ansible.builtin.slurp:
+        src: /etc/elasticsearch/log4j2.properties
+      register: log4j2_content
+
+    - name: Assert custom log4j2 with ECS JSON layout is deployed
+      ansible.builtin.assert:
+        that:
+          - "'ECSJsonLayout' in (log4j2_content.content | b64decode)"
+
+    - name: Check repository-s3 module directory exists
+      ansible.builtin.stat:
+        path: /usr/share/elasticsearch/modules/repository-s3
+      register: module_dir
+
+    - name: Assert repository-s3 is available (bundled as module in ES 8.x)
+      ansible.builtin.assert:
+        that:
+          - module_dir.stat.exists
+          - module_dir.stat.isdir
+
+    - name: Read elasticsearch.yml
+      ansible.builtin.slurp:
+        src: /etc/elasticsearch/elasticsearch.yml
+      register: es_config_content
+
+    - name: Assert cluster name and rack_id in config
+      ansible.builtin.assert:
+        that:
+          - "'test-cluster' in (es_config_content.content | b64decode)"
+          - "'test-rack' in (es_config_content.content | b64decode)"

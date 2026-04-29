@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  roles:
+    - role: ansible-elasticsearch
+      vars:
+        es_version: "8.19.10"
+        es_version_lock: true
+        es_bootstrap: true
+        es_config:
+          discovery.type: single-node
+          xpack.security.enabled: false
+          xpack.security.http.ssl.enabled: false
+          xpack.security.transport.ssl.enabled: false
+          network.host: "0.0.0.0"
+          http.port: 9200
