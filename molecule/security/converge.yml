@@ -1,0 +1,24 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  roles:
+    - role: ansible-elasticsearch
+      vars:
+        es_version: "8.19.10"
+        es_version_lock: true
+        es_api_basic_auth_username: elastic
+        es_api_basic_auth_password: "changeme"
+        es_enable_http_ssl: true
+        es_enable_transport_ssl: true
+        es_ssl_key: /etc/ssl/private/test.key
+        es_ssl_certificate: /etc/ssl/certs/test.crt
+        es_ssl_key_password: false
+        es_ssl_remote_src: true
+        es_validate_certs: true
+        es_bootstrap: true
+        es_config:
+          discovery.type: single-node
+          network.host: "0.0.0.0"
+          http.port: 9200
+          transport.port: 9300

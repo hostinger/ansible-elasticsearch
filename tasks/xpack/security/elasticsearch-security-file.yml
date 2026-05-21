@@ -1,7 +1,9 @@
 ---
-- set_fact: manage_file_users=false
+- ansible.builtin.set_fact:
+    manage_file_users: false
 
-- set_fact: manage_file_users=true
+- ansible.builtin.set_fact:
+    manage_file_users: true
   when: es_users is defined and es_users.file is defined and es_users.file.keys() | list | length > 0
 
 # Users migration from elasticsearch < 6.3 versions

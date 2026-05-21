@@ -1,0 +1,31 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  roles:
+    - role: ansible-elasticsearch
+      vars:
+        es_version: "8.19.10"
+        es_version_lock: true
+        es_bootstrap: true
+        es_config:
+          discovery.type: single-node
+          xpack.security.enabled: false
+          xpack.security.http.ssl.enabled: false
+          xpack.security.transport.ssl.enabled: false
+          network.host: "0.0.0.0"
+          http.port: 9200
+          node.roles: [master, data, ingest]
+          cluster.name: test-cluster
+          node.attr.rack_id: test-rack
+          cluster.routing.allocation.awareness.attributes: rack_id
+        es_config_log4j2: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/files/log4j2.properties"
+        es_plugins:
+          - plugin: repository-s3
+        es_keystore_entries:
+          - key: s3.client.hostinger_s3.access_key
+            value: test-access-key
+            state: present
+          - key: s3.client.hostinger_s3.secret_key
+            value: test-secret-key
+            state: present
