@@ -14,7 +14,7 @@
     shell: "dpkg-query -W -f'${Status}' {{ es_other_package_name }}"
     register: elasticsearch_package
     failed_when: False
-    changed_when: False
+    changed_when: false
     check_mode: no
 
   - name: unhold elasticsearch package when switching to a different package type
@@ -71,7 +71,7 @@
   command: dpkg-query --showformat='${Version}' --show {{ es_package_name }}
   register: installed_es_version
   failed_when: False
-  changed_when: False
+  changed_when: false
   check_mode: no
 
 - name: Debian - unhold elasticsearch version

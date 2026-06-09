@@ -32,7 +32,7 @@
   shell: cat {{ es_conf_dir }}/users | awk -F':' '{print $1}'
   register: current_file_users
   when: manage_file_users
-  changed_when: False
+  changed_when: false
   check_mode: no
 
 - name: set fact users_to_remove
@@ -76,7 +76,7 @@
   with_items: "{{ es_users.file.keys() | list }}"
   when: manage_file_users
   #Currently no easy way to figure out if the password has changed or to know what it currently is so we can skip.
-  changed_when: False
+  changed_when: false
   no_log: True
   environment:
     CONF_DIR: "{{ es_conf_dir }}"

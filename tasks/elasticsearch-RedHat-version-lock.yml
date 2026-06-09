@@ -13,7 +13,7 @@
   args:
     warn: false
   failed_when: False
-  changed_when: False
+  changed_when: false
   check_mode: False
 
 - name: RedHat - lock elasticsearch version
@@ -33,7 +33,7 @@
   args:
     warn: false
   failed_when: False
-  changed_when: False
+  changed_when: false
   check_mode: False
 
 - name: RedHat - unlock elasticsearch version

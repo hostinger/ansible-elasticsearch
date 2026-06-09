@@ -21,7 +21,7 @@
     command: >
      {{es_home}}/bin/elasticsearch-keystore list
     register: list_keystore
-    changed_when: False
+    changed_when: false
     environment:
       ES_PATH_CONF: "{{ es_conf_dir }}"
     check_mode: no
@@ -52,7 +52,7 @@
     command: >
      {{es_home}}/bin/elasticsearch-keystore list
     register: list_keystore
-    changed_when: False
+    changed_when: false
     environment:
       ES_PATH_CONF: "{{ es_conf_dir }}"
     check_mode: no
