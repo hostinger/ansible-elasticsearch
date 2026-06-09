@@ -17,7 +17,7 @@
   become: yes
   register: java_full_path
   failed_when: False
-  changed_when: False
+  changed_when: false
   check_mode: no
   when: ansible_os_family == 'RedHat'
 
