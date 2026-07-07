@@ -1,13 +1,13 @@
 ---
 - name: RedHat - install yum-version-lock
-  become: yes
+  become: true
   ansible.builtin.yum:
     name: yum-plugin-versionlock
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: RedHat - check if requested elasticsearch version lock exists
-  become: yes
+  become: true
   ansible.builtin.shell: 'yum versionlock list | grep {{es_package_name}} | grep -c "{{es_version}}"'
   register: es_requested_version_locked
   args:
@@ -17,7 +17,7 @@
   check_mode: false
 
 - name: RedHat - lock elasticsearch version
-  become: yes
+  become: true
   ansible.builtin.shell: yum versionlock delete 0:elasticsearch* ; yum versionlock add {{ es_package_name }}-{{ es_version }}
   args:
     warn: false
@@ -27,7 +27,7 @@
     - es_requested_version_locked.stdout|int == 0
 
 - name: RedHat - check if any elasticsearch version lock exists
-  become: yes
+  become: true
   ansible.builtin.shell: yum versionlock list | grep -c elasticsearch
   register: es_version_locked
   args:
@@ -37,7 +37,7 @@
   check_mode: false
 
 - name: RedHat - unlock elasticsearch version
-  become: yes
+  become: true
   ansible.builtin.shell: yum versionlock delete 0:elasticsearch*
   args:
     warn: false
