@@ -8,17 +8,17 @@
   when: update_java == true
 
 - name: RedHat - Ensure Java is installed
-  become: yes
+  become: true
   ansible.builtin.yum: name={{ java }} state={{java_state}}
   when: ansible_os_family == 'RedHat'
 
 - name: Get the installed java path
   ansible.builtin.shell: "update-alternatives --display java | grep '^/' | awk '{print $1}' | grep 1.8.0-openjdk | head -1"
-  become: yes
+  become: true
   register: java_full_path
   failed_when: false
   changed_when: false
-  check_mode: no
+  check_mode: false
   when: ansible_os_family == 'RedHat'
 
 - name: correct java version selected
@@ -29,26 +29,26 @@
   when: ansible_os_family == 'RedHat' and java_full_path is defined
 
 - name: Refresh java repo
-  become: yes
+  become: true
   ansible.builtin.apt: update_cache=yes
   changed_when: false
   when: ansible_os_family == 'Debian'
 
 - name: Debian - Ensure Java is installed
-  become: yes
+  become: true
   ansible.builtin.apt: name={{ java }} state={{java_state}}
   when: ansible_os_family == 'Debian'
 
 - name: register open_jdk version
   ansible.builtin.shell: java -version 2>&1 | grep OpenJDK
   register: open_jdk
-  ignore_errors: yes
+  ignore_errors: true
   changed_when: false
-  check_mode: no
+  check_mode: false
 
 #https://github.com/docker-library/openjdk/issues/19 - ensures tests pass due to java 8 broken certs
 - name: refresh the java ca-certificates
-  become: yes
+  become: true
   ansible.builtin.command: /var/lib/dpkg/info/ca-certificates-java.postinst configure
   when: ansible_distribution == 'Ubuntu' and open_jdk.rc == 0
   changed_when: false
