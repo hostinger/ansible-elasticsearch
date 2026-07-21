@@ -23,16 +23,16 @@
 
 #List currently installed plugins. We have to list the directories as the list commmand fails if the ES version is different than the plugin version.
 - name: Check installed elasticsearch plugins
-  become: yes
+  become: true
   ansible.builtin.shell: "ls {{es_home}}/plugins {{list_command}}"
   register: installed_plugins
   changed_when: false
-  ignore_errors: yes
+  ignore_errors: true
   environment:
     CONF_DIR: "{{ es_conf_dir }}"
     ES_PATH_CONF: "{{ es_conf_dir }}"
     ES_INCLUDE: "{{ default_file }}"
-  check_mode: no
+  check_mode: false
 
 #if es_plugins_reinstall is set to true we remove ALL plugins
 - name: set fact plugins_to_remove to install_plugins.stdout_lines
@@ -56,7 +56,7 @@
 
 # This removes any currently installed plugins (to prevent errors when reinstalling)
 - name: Remove elasticsearch plugins
-  become: yes
+  become: true
   ansible.builtin.command: "{{es_home}}/bin/elasticsearch-plugin remove {{item}} --silent"
   with_items: "{{ plugins_to_remove | default([]) }}"
   notify: restart elasticsearch
@@ -67,7 +67,7 @@
     ES_INCLUDE: "{{ default_file }}"
 
 - name: Install elasticsearch plugins
-  become: yes
+  become: true
   ansible.builtin.command: "{{es_home}}/bin/elasticsearch-plugin install {{ item.url | default(item.plugin) }} --batch"
   register: plugin_installed
   changed_when: plugin_installed.rc|default(0) == 0
