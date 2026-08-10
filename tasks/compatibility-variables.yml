@@ -12,11 +12,11 @@
     ansible.builtin.set_fact:
       oss_version: true
   - name: Warn about deprecated es_enable_xpack variable
-    debug:
+    ansible.builtin.debug:
       msg: "WARNING: es_enable_xpack variable is now deprecated. You should use oss_version instead"
 
 - name: Set the defaults here otherwise they can't be overriden in the same play if the role is called twice
-  set_fact:
+  ansible.builtin.set_fact:
     es_repo_name: "{{ es_major_version }}"
     es_package_name: "elasticsearch"
     es_other_package_name: "elasticsearch-oss"
@@ -24,7 +24,7 @@
     es_other_apt_url: "deb {{ es_repo_base }}/packages/{{ 'oss-' + es_major_version }}/apt stable main"
 
 - name: Use the oss repo and package
-  set_fact:
+  ansible.builtin.set_fact:
     es_repo_name: "{{ 'oss-' + es_major_version }}"
     es_other_repo_name: "{{ es_major_version }}"
     es_other_apt_url: "deb {{ es_repo_base }}/packages/{{ es_major_version }}/apt stable main"
@@ -34,6 +34,6 @@
     - oss_version
 
 - name: Set the URL scheme to https if SSL/TLS is enabled
-  set_fact:
+  ansible.builtin.set_fact:
     es_api_scheme: "https"
   when: es_enable_http_ssl | bool
