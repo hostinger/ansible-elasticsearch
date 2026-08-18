@@ -1,6 +1,6 @@
 ---
 - name: Activate ES license (with security authentication)
-  uri:
+  ansible.builtin.uri:
     method: PUT
     url: "{{ es_api_uri }}/{{ es_license_api }}?acknowledge=true"
     user: "{{es_api_basic_auth_username  | default(omit)}}"
@@ -18,4 +18,4 @@
     license_activated.json.license_status != 'valid'
 
 - name: License
-  debug: msg={{ license_activated }}
+  ansible.builtin.debug: msg={{ license_activated }}
