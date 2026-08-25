@@ -25,7 +25,7 @@
 
 #List current users
 - name: List Native Users
-  uri:
+  ansible.builtin.uri:
     url: "{{ es_api_uri }}/{{ es_security_api }}/user"
     method: GET
     user: "{{es_api_basic_auth_username}}"
@@ -57,7 +57,7 @@
   when: manage_native_users and es_api_basic_auth_username in native_users and native_users[es_api_basic_auth_username].password is defined
 
 - name: Update API User Password
-  uri:
+  ansible.builtin.uri:
     url: "{{ es_api_uri }}/{{ es_security_api }}/user/{{es_api_basic_auth_username}}/_password"
     method: POST
     body_format: json
@@ -80,7 +80,7 @@
 
 #Delete all non required users NOT inc. reserved
 - name: Delete Native Users
-  uri:
+  ansible.builtin.uri:
     url: "{{ es_api_uri }}/{{ es_security_api }}/user/{{item}}"
     method: DELETE
     status_code: 200
@@ -96,13 +96,13 @@
   when: manage_native_users
 
 - name: debug message
-  debug:
+  ansible.builtin.debug:
     msg: "WARNING: YOU CAN ONLY CHANGE THE PASSWORD FOR RESERVED USERS IN THE NATIVE REALM. ANY ROLE CHANGES WILL BE IGNORED: {{users_to_ignore}}"
   when: manage_native_users and users_to_ignore | length > 0
 
 #Update password on all reserved users
 - name: Update Reserved User Passwords
-  uri:
+  ansible.builtin.uri:
     url: "{{ es_api_uri }}/{{ es_security_api }}/user/{{ item | urlencode }}/_password"
     method: POST
     body_format: json
@@ -122,7 +122,7 @@
 
 #Overwrite all other users NOT inc. those reserved
 - name: Update Non-Reserved Native User Details
-  uri:
+  ansible.builtin.uri:
     url: "{{ es_api_uri }}/{{ es_security_api }}/user/{{ item | urlencode }}"
     method: POST
     body_format: json
@@ -140,7 +140,7 @@
 
 #List current roles not. inc those reserved
 - name: List Native Roles
-  uri:
+  ansible.builtin.uri:
     url: "{{ es_api_uri }}/{{ es_security_api }}/role"
     method: GET
     user: "{{es_api_basic_auth_username}}"
@@ -165,7 +165,7 @@
   when: manage_native_roles
 
 - name: debug message
-  debug:
+  ansible.builtin.debug:
     msg: "WARNING: YOU CANNOT CHANGE RESERVED ROLES. THE FOLLOWING WILL BE IGNORED: {{roles_to_ignore}}"
   when: manage_native_roles and roles_to_ignore | length > 0
 
@@ -175,7 +175,7 @@
 
 #Delete all non required roles NOT inc. reserved
 - name: Delete Native Roles
-  uri:
+  ansible.builtin.uri:
     url: "{{ es_api_uri }}/{{ es_security_api }}/role/{{ item | urlencode }}"
     method: DELETE
     status_code: 200
@@ -192,7 +192,7 @@
 
 #Update other roles - NOT inc. reserved roles
 - name: Update Native Roles
-  uri:
+  ansible.builtin.uri:
     url: "{{ es_api_uri }}/{{ es_security_api }}/role/{{ item | urlencode }}"
     method: POST
     body_format: json
