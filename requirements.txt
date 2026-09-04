@@ -2,3 +2,4 @@ molecule>=6.0
 molecule-plugins[docker]>=23.0
 ansible>=9.0
 ansible-lint>=6.0
+pytest>=8.0

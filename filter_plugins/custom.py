@@ -37,28 +37,23 @@ def filename(filename=""):
     return os.path.splitext(os.path.basename(filename))[0]
 
 
+def _is_reserved(details):
+    """Return True when an Elasticsearch user/role entry is flagged as reserved."""
+    return (
+        "metadata" in details
+        and "_reserved" in details["metadata"]
+        and bool(details["metadata"]["_reserved"])
+    )
+
+
 def remove_reserved(user_roles={}):
-    not_reserved = []
-    for user_role, details in list(user_roles.items()):
-        if (
-            not "metadata" in details
-            or not "_reserved" in details["metadata"]
-            or not details["metadata"]["_reserved"]
-        ):
-            not_reserved.append(user_role)
-    return not_reserved
+    """Return the names of the entries that are NOT reserved."""
+    return [name for name, details in user_roles.items() if not _is_reserved(details)]
 
 
 def filter_reserved(users_role={}):
-    reserved = []
-    for user_role, details in list(users_role.items()):
-        if (
-            "metadata" in details
-            and "_reserved" in details["metadata"]
-            and details["metadata"]["_reserved"]
-        ):
-            reserved.append(user_role)
-    return reserved
+    """Return the names of the entries that ARE reserved."""
+    return [name for name, details in users_role.items() if _is_reserved(details)]
 
 
 class FilterModule(object):
