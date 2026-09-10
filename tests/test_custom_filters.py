@@ -69,6 +69,10 @@ def test_append_to_list_accepts_a_list_or_a_comma_separated_string():
     assert append_to_list("/data1,/data2", suffix="/es") == ["/data1/es", "/data2/es"]
 
 
+def test_append_to_list_keeps_empty_string_as_string_input():
+    assert append_to_list("", suffix="/es") == ["/es"]
+
+
 def test_array_to_str_joins_with_the_separator():
     assert array_to_str(["/data1", "/data2"]) == "/data1,/data2"
     assert array_to_str(["/data1", "/data2"], separator=";") == "/data1;/data2"

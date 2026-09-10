@@ -6,7 +6,8 @@ import os.path
 
 def modify_list(values=None, pattern="", replacement="", ignorecase=False):
     """Perform a `re.sub` on every item in the list."""
-    values = values or []
+    if values is None:
+        values = []
     if ignorecase:
         flags = re.I
     else:
@@ -16,19 +17,24 @@ def modify_list(values=None, pattern="", replacement="", ignorecase=False):
 
 
 def append_to_list(values=None, suffix=""):
-    values = values or []
+    if values is None:
+        values = []
     if isinstance(values, str):
         values = values.split(",")
     return [str(value + suffix) for value in values]
 
 
 def array_to_str(values=None, separator=","):
-    return separator.join(values or [])
+    if values is None:
+        values = []
+    return separator.join(values)
 
 
 def extract_role_users(users=None, exclude_users=None):
-    users = users or {}
-    exclude_users = exclude_users or []
+    if users is None:
+        users = {}
+    if exclude_users is None:
+        exclude_users = []
     role_users = []
     for user, details in users.items():
         if user not in exclude_users and "roles" in details:
@@ -52,13 +58,15 @@ def _is_reserved(details):
 
 def remove_reserved(user_roles=None):
     """Return the names of the entries that are NOT reserved."""
-    user_roles = user_roles or {}
+    if user_roles is None:
+        user_roles = {}
     return [name for name, details in user_roles.items() if not _is_reserved(details)]
 
 
 def filter_reserved(user_roles=None):
     """Return the names of the entries that ARE reserved."""
-    user_roles = user_roles or {}
+    if user_roles is None:
+        user_roles = {}
     return [name for name, details in user_roles.items() if _is_reserved(details)]
 
 
