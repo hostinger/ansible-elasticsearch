@@ -1,18 +1,17 @@
 # AGENTS.md -- ansible-elasticsearch
 
-This file is the vendor-neutral agent brief (Cursor, Claude Code, DEX, and similar).
-There is no `CLAUDE.md`. Read it before opening a pull request.
+This file is the vendor-neutral brief for coding agents. There is no `CLAUDE.md`.
+Read it before opening a pull request.
+
+Do not put private infrastructure, internal tool names, other repository names,
+or environment topology in this file, in pull request titles, or in commit
+messages. This repository is public.
 
 ## What this repo is
 
-Hostinger fork of [elastic/ansible-elasticsearch](https://github.com/elastic/ansible-elasticsearch).
-It is the Ansible role that installs and configures Elasticsearch nodes for Hostinger's
-observability clusters (INT / KUL / BOS).
-
-Consumed from [ansible-infra](https://github.com/hostinger/ansible-infra) as the
-`community.elasticsearch` role (git source, version-pinned). Cluster bootstrap,
-inventory, and node sizing live in ansible-infra — this repo is the role only.
-Owner: `@hostinger/observability`.
+Public fork of [elastic/ansible-elasticsearch](https://github.com/elastic/ansible-elasticsearch).
+Ansible role that installs and configures Elasticsearch. This repository is the
+role only.
 
 ## Layout
 
@@ -31,9 +30,9 @@ Most work happens in `tasks/`, `templates/`, `defaults/main.yml`, and
 
 ## Pull request titles
 
-The GitHub PR title is the primary signal for humans, release-drafter, and coding
-agents. It must describe the actual change so someone can understand the PR
-without opening the diff.
+The GitHub PR title is the primary signal for humans, release-drafter, and
+coding agents. It must describe the actual change so someone can understand the
+PR without opening the diff.
 
 Use [Conventional Commits](https://www.conventionalcommits.org):
 
@@ -55,13 +54,13 @@ Allowed types: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`, `ci`, `perf`.
 - `Daily code improvement (YYYY-MM-DD)`
 - `Weekly code improvement (YYYY-MM-DD)`
 - `Daily code improvement`
-- Generic hex/DEX labels, dated batch names, or “misc fixes”
+- Dated batch names, generic agent labels, or “misc fixes”
 
 | Bad | Good |
 | --- | --- |
 | `Daily code improvement (2026-09-08)` | `fix: avoid mutable default arguments in custom filter plugins` |
 | `Weekly code improvement (2026-05-29)` | `refactor: extract shared reserved-entry predicate in custom filters` |
-| `hex improvements` | `chore: qualify remaining module invocations with FQCNs` |
+| `misc improvements` | `chore: qualify remaining module invocations with FQCNs` |
 
 If a scheduled agent run produces several unrelated fixes, open **one PR per
 change** (or at least one PR per concern), each with its own context-aware title.
@@ -73,6 +72,7 @@ The PR title and the subject of the main commit should say the same thing.
 
 - Conventional Commits, imperative mood (`avoid`, `extract`, `qualify` — not `avoided` / `extracting`).
 - Do not commit secrets, license files, or `.env`.
+- Do not mention private systems, internal tools, or other repositories.
 
 ## Tests
 
@@ -92,8 +92,6 @@ The PR title and the subject of the main commit should say the same thing.
 - Security user/role filters (`filter_reserved`, `extract_role_users`) → tasks
   under `tasks/xpack/security/`. Call sites are positional Jinja pipes; keep
   parameter names consistent across sibling filters.
-- Role version bump is **not** this repo: ansible-infra pins
-  `community.elasticsearch` in `collections/requirements.yml`.
 
 ## Anti-patterns
 
