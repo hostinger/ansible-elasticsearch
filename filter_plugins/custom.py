@@ -4,8 +4,10 @@ import re
 import os.path
 
 
-def modify_list(values=[], pattern="", replacement="", ignorecase=False):
-    """ Perform a `re.sub` on every item in the list"""
+def modify_list(values=None, pattern="", replacement="", ignorecase=False):
+    """Perform a `re.sub` on every item in the list."""
+    if values is None:
+        values = []
     if ignorecase:
         flags = re.I
     else:
@@ -14,19 +16,27 @@ def modify_list(values=[], pattern="", replacement="", ignorecase=False):
     return [_re.sub(replacement, value) for value in values]
 
 
-def append_to_list(values=[], suffix=""):
+def append_to_list(values=None, suffix=""):
+    if values is None:
+        values = []
     if isinstance(values, str):
         values = values.split(",")
     return [str(value + suffix) for value in values]
 
 
-def array_to_str(values=[], separator=","):
+def array_to_str(values=None, separator=","):
+    if values is None:
+        values = []
     return separator.join(values)
 
 
-def extract_role_users(users={}, exclude_users=[]):
+def extract_role_users(users=None, exclude_users=None):
+    if users is None:
+        users = {}
+    if exclude_users is None:
+        exclude_users = []
     role_users = []
-    for user, details in list(users.items()):
+    for user, details in users.items():
         if user not in exclude_users and "roles" in details:
             for role in details["roles"]:
                 role_users.append(role + ":" + user)
@@ -46,14 +56,18 @@ def _is_reserved(details):
     )
 
 
-def remove_reserved(user_roles={}):
+def remove_reserved(user_roles=None):
     """Return the names of the entries that are NOT reserved."""
+    if user_roles is None:
+        user_roles = {}
     return [name for name, details in user_roles.items() if not _is_reserved(details)]
 
 
-def filter_reserved(users_role={}):
+def filter_reserved(user_roles=None):
     """Return the names of the entries that ARE reserved."""
-    return [name for name, details in users_role.items() if _is_reserved(details)]
+    if user_roles is None:
+        user_roles = {}
+    return [name for name, details in user_roles.items() if _is_reserved(details)]
 
 
 class FilterModule(object):
