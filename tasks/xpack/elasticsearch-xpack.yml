@@ -8,7 +8,7 @@
 #Make sure elasticsearch.keystore has correct Permissions
 - name: Set elasticsearch.keystore Permissions
   become: yes
-  file:
+  ansible.builtin.file:
     state: file
     path: "{{ es_conf_dir }}/elasticsearch.keystore"
     owner: root
