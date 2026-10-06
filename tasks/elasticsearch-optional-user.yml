@@ -4,7 +4,7 @@
   become: true
   #Restart if these change
   notify: restart elasticsearch
-  group:
+  ansible.builtin.group:
     state: present
     name: "{{ es_group }}"
     system: true
@@ -14,7 +14,7 @@
   become: true
   #Restart if these change
   notify: restart elasticsearch
-  user:
+  ansible.builtin.user:
     state: present
     name: "{{ es_user }}"
     comment: elasticsearch system user
