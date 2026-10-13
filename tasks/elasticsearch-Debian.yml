@@ -11,7 +11,7 @@
   become: yes
   block:
   - name: Check if the elasticsearch package is installed
-    shell: "dpkg-query -W -f'${Status}' {{ es_other_package_name }}"
+    ansible.builtin.shell: "dpkg-query -W -f'${Status}' {{ es_other_package_name }}"
     register: elasticsearch_package
     failed_when: false
     changed_when: false
@@ -19,19 +19,19 @@
 
   - name: unhold elasticsearch package when switching to a different package type
     become: yes
-    dpkg_selections:
+    ansible.builtin.dpkg_selections:
       name: "{{ es_other_package_name }}"
       selection: "install"
     when: elasticsearch_package.stdout == 'install ok installed'
 
   - name: stop elasticsearch
-    service:
+    ansible.builtin.service:
       name: 'elasticsearch'
       state: stopped
     when: elasticsearch_package.stdout == 'install ok installed'
 
   - name: Debian - Remove elasticsearch package if we are switching to a different package type
-    apt:
+    ansible.builtin.apt:
       name: '{{ es_other_package_name }}'
       state: absent
     when: elasticsearch_package.stdout == 'install ok installed'
